@@ -1,0 +1,81 @@
+clc;clear all;close all
+va=input('enter open circuit voltage:')
+z0=input('enter z0:')
+z1=input('enter z1:')
+z2=input('enter z2:')
+zf=input('enter zf')
+ea=va/sqrt(3)
+a=-0.5+0.866j
+A=[1  1  1; 1  a  a*a;1  a*a  a]
+disp('enter the choice 1 lg,2 llg, 3 ll ')
+x=input('enter choice')
+switch(x)
+    case 1
+        disp('lg')
+        Ia0=ea/(z1+ z2+z0+ 3*zf)
+        Ia1=Ia0
+        Ia2=Ia0
+        va0=-Ia0*z0
+        va1=ea-(Ia1*z1)
+        va2=Ia2*z2
+        vabc=A*[va0;va1;va2]
+        va=vabc(1,:)
+        vb=vabc(2,:)
+        vc=vabc(3,:)
+        Iabc=A*[Ia0;Ia1;Ia2]
+        Ia=Iabc(1,:)
+        Ib=Iabc(2,:)
+        Ic=Iabc(3,:)
+        If=3*abs(Ia0)
+        if Iabc(2,:)==Iabc(3,:)
+            disp('boundary conditions satisfied')
+        else
+            disp('not satisfied')
+        end
+    case 2
+        disp('llg')
+        Ia1=ea/(z1+(z2*(z0+3*zf)/(z2+z0+3*zf)))
+        Ia2=(-Ia1*(z0+3*zf))/(z0+z2+3*zf)
+        Ia0=-Ia1*z2/(z2+z0+3*zf)
+        va0=-Ia0*z0
+        va1=ea-(Ia1*z1)
+        va2=-Ia2*z2
+        vabc=A*[va0;va1;va2]
+        va=vabc(1,:)
+        vb=vabc(2,:)
+        vc=vabc(3,:)
+        Iabc=A*[Ia0;Ia1;Ia2]
+        Ia=Iabc(1,:)
+        Ib=Iabc(2,:)
+        Ic=Iabc(3,:)
+        If=3*abs(Ia0)
+        if Iabc(1,:)==0
+            disp('boundary conditions satisfied')
+        else
+            disp('not satisfied')
+        end
+    case 3
+        disp('ll')
+        Ia1=ea/(z1+z2+zf)
+        Ia2=-Ia1
+        Ia0=0
+        va0=0
+        va1=ea-(Ia1*z1)
+        va2=-Ia2*z2
+        vabc=A*[va0;va1;va2]
+        va=vabc(1,:)
+        vb=vabc(2,:)
+        vc=vabc(3,:)
+        Iabc=A*[Ia0;Ia1;Ia2]
+        Ia=Iabc(1,:)
+        Ib=Iabc(2,:)
+        Ic=Iabc(3,:)
+        If=sqrt(3)*abs(Ia1)
+        if Iabc(2,:)==-Iabc(3,:)
+            disp('boundary condition satisfied')
+        else
+                disp('not satisfied')
+        end
+    otherwise
+        disp('invalid choice')
+end

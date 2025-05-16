@@ -1,0 +1,58 @@
+clc;clear all ;close all;
+pr=input('enter the receving end power:')
+vrl=input('enter the receving end voltage:')
+pf=input('enter the receving end pf:')
+z=input('enter the total series impedance:')
+y=input('enter the total shunt admittance:')
+x=input('enter the choice:1 for short transmission line,2 nominal T,3 for Pi method')
+vrp=(vrl)/(sqr(3))
+irl=(pr)/(sqr(3)*vrl*pf)
+disp('vector form of irl')
+irp=irl*(pf-(sin(acos(pf)))*i)%"i"is imaginary operator
+switch(x)
+    case 1
+        disp('for a short transmission line')
+        a=1
+        b=z
+        c=0
+        d=1
+    case 2
+        disp('for nominal T ')
+        a=(1+((y*z)/2))
+        b=z*(1+(y*z)/4)
+        c=y
+        d=a
+    case 3
+        disp('for nomial Pi')
+        a=(1+((y*z)/2))
+        b=z
+        c=y*(1+(y*z)/4)
+        d=a
+    otherwise
+        disp('not valid choice')
+end
+disp('sending end voitage')
+vs=(a*vrp)+(b*irp)
+disp('sending end current')
+is=(c*vrp)+(d*irp)
+disp('sending end pf')
+x2=angle(vs)-angle(is)
+pfs=cos(x2)
+disp('sending end power')
+ps=ads((3)*abs(vs)*abs(is)*pfs)
+disp('regulation')
+r=((((abs(vs))/a-vrp)/vrp)*100
+R=abs*(r)
+disp('efficiency')
+n=(pr/ps)*100
+N=abs(n)
+if (abs (a*d-b*c)==1)
+    disp('recirocity')
+else
+    dip('not recirocity')
+end
+if(a==d)
+    disp('symmetry')
+else
+    disp('not symmetry')
+end

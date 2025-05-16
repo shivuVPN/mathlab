@@ -1,0 +1,20 @@
+clc;clear all;close all;
+x=input('enter choice 1 or 2')
+switch(x)
+    case 1
+        a=input('bus incidence matrix')
+        z=input('primitive impedence')
+        y=inv(z)
+        y_bus=a*y*a'
+    case 2
+        n=input('no of nodes')
+        y=input('admitance')
+        
+        y(n,n)=0
+        for(i=1:n)
+        for(j=1:n)
+         if z(i,j)~=0
+             y(i,j)=inv(z(i,j))
+             y(i,j)=y(i,j)
+             y_bus(i,j)=-y_bus(i,j)
+             y(i,j)

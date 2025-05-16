@@ -1,0 +1,56 @@
+clc;clear all;close all;
+p=input('enter power')
+pf=input('entre pf')
+vl=input('enter vl')
+xd=input('enter xd')
+xq=input('enter xs')
+
+vp=vl/sqrt(3)
+pf_a=acos(pf)
+q=p*tan(pf_a)
+I=(p-i*q)/(3*vp)
+delta=0:5:180
+delta_rad=delta*(pi/180);
+d_constant=0.286
+x=input('1 non salient,2 salient')
+switch(x)
+    case 1
+        ef=vp+(1i*I*xd)
+        emf=abs(ef)
+        reg=((abs(ef))-(abs(vp))/abs(vp))*100
+        p_n=(abs(ef)*vp*sin(delta_rad))/xd
+        net_p=(3*p_n)/1e6
+        power_non=(abs(ef)*vp*sin(d_constant))/xd
+        net_power=(3*power_non)/1e6
+        
+        plot(delta,net_p);
+        xlabel('delta(degree)')
+        ylabel('3 phase power')
+        grid on
+    case 2
+        eq=vp+i*I*xq
+        id_mag=abs(I)*(sin(angle(eq)-angle(I)))
+        emf_mag=abs(eq)+(xd-xq)*id_mag
+        reg=(emf_mag-abs(vp))*100/abs(vp)
+        pp=emf_mag*vp*sin(delta_rad)/xd;
+        reluctance_power=vp^2*(xd-xq)*sin(2*delta_rad)/(2*xd*xq);
+        power_sal=pp+reluctant_power;
+        net_reluctant_power=3*reluctance_power/1e6;
+        net_power_sal=3*power_sal/1e6;
+        
+        ppl=((emf_mag*vp)/xd)*sin(d_constant)
+        vp^2*(xd-xq)*sin(2*d_constnt)/(2*xd*xq)
+        power_sal2=ppl+reluctant_power2
+        net_reluctant_power2=3*reluctant_power2/1e6
+        net_power_sal2=3*power_sal2/1e6
+        
+        plot(delta,net_reluctance_power,'k')
+        legend('reluctance power')
+        hold on
+        plot(delta,net_power_sal,'r')
+        xlable('delta(deg)')
+        ylable('3 phase power')
+        title('salient pole machine')
+        legend('salient power') 
+        grid on
+end
