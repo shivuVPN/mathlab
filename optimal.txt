@@ -1,0 +1,57 @@
+clc;
+clear;
+
+% Load demand
+Pd = 800;
+
+% Cost coefficients
+a = [7.2 7.3 6.74];         % linear terms
+b = [0.004 0.0025 0.003];   % quadratic terms
+c = [350 500 600];          % constant terms
+
+% Lambda limits
+lambda_min = 6;
+lambda_max = 10;
+
+% Tolerance for convergence
+tol = 0.001;
+
+% Iterative method to find optimal lambda
+while true
+    lambda = (lambda_min + lambda_max) / 2;
+    
+    % Compute power outputs
+    P1 = (lambda - a(1)) / (2 * b(1));
+    P2 = (lambda - a(2)) / (2 * b(2));
+    P3 = (lambda - a(3)) / (2 * b(3));
+    
+    % Total generated power
+    Pt = P1 + P2 + P3;
+    
+    % Check convergence
+    if abs(Pt - Pd) < tol
+        break;
+    end
+    
+    % Adjust lambda bounds
+    if Pt > Pd
+        lambda_max = lambda;
+    else
+        lambda_min = lambda;
+    end
+end
+
+% Display optimal results after convergence
+fprintf('Optimal Generation Schedule:\n');
+fprintf('P1 = %.4f MW\n', P1);
+fprintf('P2 = %.4f MW\n', P2);
+fprintf('P3 = %.4f MW\n', P3);
+fprintf('Total Power = %.4f MW\n', Pt);
+
+% Calculate total fuel cost
+F1 = c(1) + a(1)*P1 + b(1)*P1^2;
+F2 = c(2) + a(2)*P2 + b(2)*P2^2;
+F3 = c(3) + a(3)*P3 + b(3)*P3^2;
+Total_Cost = F1 + F2 + F3;
+
+fprintf('Total Fuel Cost = Rs. %.2f\n', Total_Cost);
